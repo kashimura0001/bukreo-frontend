@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../bukreo-api/.idea/bukreo-api.iml" filepath="$PROJECT_DIR$/../bukreo-api/.idea/bukreo-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/bukreo-frontend.iml" filepath="$PROJECT_DIR$/.idea/bukreo-frontend.iml" />
     </modules>
   </component>

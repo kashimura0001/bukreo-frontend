@@ -5,12 +5,16 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider } from "@chakra-ui/react";
 import { AuthProvider } from "./providers/AuthProvider";
+import { ApolloProvider } from "@apollo/client";
+import { apolloClient } from "./lib/apolloClient";
 
 ReactDOM.render(
   <React.StrictMode>
     <ChakraProvider>
       <AuthProvider>
-        <App />
+        <ApolloProvider client={apolloClient}>
+          <App />
+        </ApolloProvider>
       </AuthProvider>
     </ChakraProvider>
   </React.StrictMode>,
