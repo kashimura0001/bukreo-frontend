@@ -1,28 +1,56 @@
 import React, { VFC, useState, FormEvent } from "react";
-import { useAuth } from "../hooks/useAuth";
-import { useHistory } from "react-router-dom";
-import { SIGN_IN_PATH } from "../config/routes";
-import {
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-} from "@chakra-ui/form-control";
+import firebase from "firebase";
+import { Redirect, useHistory } from "react-router-dom";
+import { SIGN_IN_PATH, TEAMS_PATH } from "../config/routes";
+import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Flex, Box, Button, Text } from "@chakra-ui/react";
+import { gql } from "@apollo/client/core";
+import { useMutation } from "@apollo/client";
+import { useAuth } from "../hooks/useAuth";
+import { UserAuthStatus } from "../utils/constants";
+
+const CREATE_USER = gql`
+  mutation createUser(
+    $firebaseIdToken: String!
+    $name: String!
+    $email: String!
+  ) {
+    createUser(
+      input: { firebaseIdToken: $firebaseIdToken, name: $name, email: $email }
+    ) {
+      id
+    }
+  }
+`;
 
 export const OnboardingScreen: VFC = () => {
   const [name, setName] = useState("");
 
   const history = useHistory();
-  const { signOut } = useAuth();
+  const { status } = useAuth();
+  const [createUser] = useMutation(CREATE_USER);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // TODO: プロフィール登録処理を実装する
 
-    // TODO 消す
-    signOut();
+    const firebaseUser = firebase.auth().currentUser;
+    if (!firebaseUser) throw new Error("Not signed in.");
+
+    const firebaseIdToken = await firebaseUser.getIdToken(true);
+    const email = firebaseUser.email;
+
+    await createUser({ variables: { firebaseIdToken, name, email } })
+      .then(() => {
+        firebaseUser.sendEmailVerification();
+        history.push(TEAMS_PATH);
+      })
+      .catch((e) => console.log(e));
   };
+
+  if (status === UserAuthStatus.SignedOut) {
+    return <Redirect to={SIGN_IN_PATH} />;
+  }
 
   return (
     <Flex w="full" align="center" justifyContent="center">

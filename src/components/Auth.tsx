@@ -1,9 +1,12 @@
-import React, { VFC, ReactNode, useEffect } from "react";
+import React, { FC } from "react";
 import { useAuth } from "../hooks/useAuth";
-import { useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { ONBOARDING_PATH, SIGN_IN_PATH } from "../config/routes";
 import { gql } from "@apollo/client/core";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
+import { UserAuthStatus } from "../utils/constants";
+
+const Unauthorized = 401;
 
 const FetchCurrentUserQuery = gql`
   query FetchCurrentUserQuery {
@@ -13,38 +16,33 @@ const FetchCurrentUserQuery = gql`
   }
 `;
 
-type Props = {
-  children: ReactNode;
-};
+type Props = {};
 
-// TODO APIとの繋ぎ込み、認証の動作確認
-export const Auth: VFC<Props> = ({ children }) => {
-  const { loading, user } = useAuth();
-  const [fetchCurrentUser, { data, error }] = useLazyQuery(
-    FetchCurrentUserQuery
-  );
-  const history = useHistory();
+export const Auth: FC<Props> = ({ children }) => {
+  const { status } = useAuth();
+  const { loading, data, error } = useQuery(FetchCurrentUserQuery);
 
-  useEffect(() => {
-    if (user) fetchCurrentUser();
-  }, [fetchCurrentUser, user]);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (status === UserAuthStatus.SignedOut) {
+    return <Redirect to={SIGN_IN_PATH} />;
+  }
 
   if (error) {
-    console.log(error);
-    return <div>Error...</div>;
+    const isUnauthorizedError = error.graphQLErrors.some((e) => {
+      return e.extensions?.exception?.status === Unauthorized;
+    });
+
+    if (isUnauthorizedError) {
+      return <Redirect to={ONBOARDING_PATH} />;
+    }
   }
 
-  // TODO loadingページを追加する
-  if (loading || !data) return <div>認証中...</div>;
-
-  if (!user) {
-    history.push(SIGN_IN_PATH);
-    return null;
-  }
-
-  if (!data.currentUser) {
-    history.push(ONBOARDING_PATH);
-    return null;
+  if (!data?.currentUser) {
+    // TODO 通信エラーであることをトーストに表示する
+    return <Redirect to={SIGN_IN_PATH} />;
   }
 
   return <>{children}</>;

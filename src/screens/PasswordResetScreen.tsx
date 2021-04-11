@@ -1,9 +1,5 @@
 import React, { VFC, useState } from "react";
-import {
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-} from "@chakra-ui/form-control";
+import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Flex, Box, Button, Text } from "@chakra-ui/react";
 import { SIGN_IN_PATH } from "../config/routes";

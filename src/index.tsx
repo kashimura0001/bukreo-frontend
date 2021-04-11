@@ -1,12 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import "./lib/firebase";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider } from "@chakra-ui/react";
 import { AuthProvider } from "./providers/AuthProvider";
 import { ApolloProvider } from "@apollo/client";
-import { apolloClient } from "./lib/apolloClient";
+import { apolloClient } from "./config/apolloClient";
 
 ReactDOM.render(
   <React.StrictMode>

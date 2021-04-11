@@ -1,15 +1,12 @@
 import React, { FormEvent, useState, VFC } from "react";
 import { useAuth } from "../hooks/useAuth";
-import { useHistory } from "react-router-dom";
-import { ONBOARDING_PATH, SIGN_IN_PATH } from "../config/routes";
+import { Redirect, useHistory } from "react-router-dom";
+import { ONBOARDING_PATH, SIGN_IN_PATH, TEAMS_PATH } from "../config/routes";
 import { PasswordInput } from "../components/PasswordInput";
-import {
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-} from "@chakra-ui/form-control";
+import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Flex, Box, Button, Text } from "@chakra-ui/react";
+import { UserAuthStatus } from "../utils/constants";
 
 type Props = {};
 
@@ -18,13 +15,15 @@ export const SignUpScreen: VFC<Props> = () => {
   const [password, setPassword] = useState("");
 
   const history = useHistory();
-  const { signUpEmail } = useAuth();
+  const { status, signUpEmail } = useAuth();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     await signUpEmail(email, password);
     await history.push(ONBOARDING_PATH);
   };
+
+  if (status === UserAuthStatus.SignedIn) return <Redirect to={TEAMS_PATH} />;
 
   return (
     <Flex w="full" align="center" justifyContent="center">

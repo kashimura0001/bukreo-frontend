@@ -1,9 +1,9 @@
 import React, { createContext, ReactNode, useEffect, useState } from "react";
-import firebase from "../lib/firebase";
+import firebase from "firebase";
+import { UserAuthStatus } from "../utils/constants";
 
 type AuthContextType = {
-  loading: boolean;
-  user: firebase.User | null;
+  status: UserAuthStatus;
   signInEmail: (email: string, password: string) => void;
   signUpEmail: (email: string, password: string) => void;
   signOut: () => void;
@@ -12,13 +12,11 @@ type AuthContextType = {
 export const authContext = createContext({} as AuthContextType);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<firebase.User | null>(null);
+  const [status, setStatus] = useState<UserAuthStatus>(UserAuthStatus.Unknown);
 
   useEffect(() => {
     return firebase.auth().onAuthStateChanged((user) => {
-      setUser(user);
-      setLoading(false);
+      setStatus(user ? UserAuthStatus.SignedIn : UserAuthStatus.SignedOut);
     });
   }, []);
 
@@ -35,8 +33,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const useProvideAuth = {
-    loading,
-    user,
+    status,
     signInEmail,
     signUpEmail,
     signOut,
