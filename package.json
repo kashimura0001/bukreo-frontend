@@ -29,7 +29,8 @@
   "scripts": {
     "start": "PORT=4000 react-scripts start",
     "build": "PORT=4000 react-scripts build",
-    "test": "PORT=4000 react-scripts test"
+    "test": "PORT=4000 react-scripts test",
+    "generate": "graphql-codegen --config codegen.yml"
   },
   "eslintConfig": {
     "extends": [
@@ -50,6 +51,11 @@
     ]
   },
   "devDependencies": {
-    "prettier": "2.2.1"
+    "@graphql-codegen/cli": "1.21.4",
+    "prettier": "2.2.1",
+    "@graphql-codegen/typescript": "1.22.0",
+    "@graphql-codegen/typescript-operations": "1.17.16",
+    "@graphql-codegen/typescript-react-apollo": "2.2.4",
+    "@graphql-codegen/introspection": "1.18.2"
   }
 }
