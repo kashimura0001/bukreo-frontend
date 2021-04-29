@@ -1,0 +1,11 @@
+mutation createUser(
+  $firebaseIdToken: String!
+  $name: String!
+  $email: String!
+) {
+  createUser(
+    input: { firebaseIdToken: $firebaseIdToken, name: $name, email: $email }
+  ) {
+    id
+  }
+}
