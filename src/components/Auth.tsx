@@ -2,25 +2,17 @@ import React, { FC } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { Redirect } from "react-router-dom";
 import { ONBOARDING_PATH, SIGN_IN_PATH } from "../config/routes";
-import { gql } from "@apollo/client/core";
 import { useQuery } from "@apollo/client";
 import { UserAuthStatus } from "../utils/constants";
+import { CurrentUserDocument } from "../graphql/schema";
 
 const Unauthorized = 401;
-
-const FetchCurrentUserQuery = gql`
-  query FetchCurrentUserQuery {
-    currentUser {
-      id
-    }
-  }
-`;
 
 type Props = {};
 
 export const Auth: FC<Props> = ({ children }) => {
   const { status } = useAuth();
-  const { loading, data, error } = useQuery(FetchCurrentUserQuery);
+  const { loading, data, error } = useQuery(CurrentUserDocument);
 
   if (loading) {
     return <div>Loading...</div>;

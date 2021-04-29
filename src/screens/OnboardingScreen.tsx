@@ -5,31 +5,17 @@ import { SIGN_IN_PATH, TEAMS_PATH } from "../config/routes";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Flex, Box, Button, Text } from "@chakra-ui/react";
-import { gql } from "@apollo/client/core";
 import { useMutation } from "@apollo/client";
 import { useAuth } from "../hooks/useAuth";
 import { UserAuthStatus } from "../utils/constants";
-
-const CREATE_USER = gql`
-  mutation createUser(
-    $firebaseIdToken: String!
-    $name: String!
-    $email: String!
-  ) {
-    createUser(
-      input: { firebaseIdToken: $firebaseIdToken, name: $name, email: $email }
-    ) {
-      id
-    }
-  }
-`;
+import { CreateUserDocument } from "../graphql/schema";
 
 export const OnboardingScreen: VFC = () => {
   const [name, setName] = useState("");
 
   const history = useHistory();
   const { status } = useAuth();
-  const [createUser] = useMutation(CREATE_USER);
+  const [createUser] = useMutation(CreateUserDocument);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
