@@ -1,0 +1,13 @@
+query TeamsScreen {
+  currentUser {
+    id
+    name
+    members {
+      id
+      team {
+        id
+        name
+      }
+    }
+  }
+}
