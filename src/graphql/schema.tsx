@@ -144,6 +144,15 @@ export type AuthComponentQuery = (
   ) }
 );
 
+export type TeamListFragment = (
+  { __typename?: 'Member' }
+  & Pick<Member, 'id' | 'role'>
+  & { team: (
+    { __typename?: 'Team' }
+    & Pick<Team, 'id' | 'name'>
+  ) }
+);
+
 export type CreateUserMutationVariables = Exact<{
   firebaseIdToken: Scalars['String'];
   name: Scalars['String'];
@@ -169,16 +178,21 @@ export type TeamsScreenQuery = (
     & Pick<User, 'id' | 'name'>
     & { members: Array<Maybe<(
       { __typename?: 'Member' }
-      & Pick<Member, 'id'>
-      & { team: (
-        { __typename?: 'Team' }
-        & Pick<Team, 'id' | 'name'>
-      ) }
+      & TeamListFragment
     )>> }
   ) }
 );
 
-
+export const TeamListFragmentDoc = gql`
+    fragment TeamList on Member {
+  id
+  role
+  team {
+    id
+    name
+  }
+}
+    `;
 export const AuthComponentDocument = gql`
     query AuthComponent {
   currentUser {
@@ -259,15 +273,11 @@ export const TeamsScreenDocument = gql`
     id
     name
     members {
-      id
-      team {
-        id
-        name
-      }
+      ...TeamList
     }
   }
 }
-    `;
+    ${TeamListFragmentDoc}`;
 
 /**
  * __useTeamsScreenQuery__
