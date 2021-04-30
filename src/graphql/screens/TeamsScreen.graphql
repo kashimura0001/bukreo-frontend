@@ -3,11 +3,7 @@ query TeamsScreen {
     id
     name
     members {
-      id
-      team {
-        id
-        name
-      }
+      ...TeamList
     }
   }
 }

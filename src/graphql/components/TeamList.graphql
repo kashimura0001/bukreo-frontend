@@ -1,0 +1,8 @@
+fragment TeamList on Member {
+  id
+  role
+  team {
+    id
+    name
+  }
+}
