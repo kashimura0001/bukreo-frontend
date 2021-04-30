@@ -133,10 +133,10 @@ export enum UserRole {
   Member = 'Member'
 }
 
-export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
+export type AuthComponentQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserQuery = (
+export type AuthComponentQuery = (
   { __typename?: 'Query' }
   & { currentUser: (
     { __typename?: 'User' }
@@ -179,8 +179,8 @@ export type TeamsScreenQuery = (
 );
 
 
-export const CurrentUserDocument = gql`
-    query CurrentUser {
+export const AuthComponentDocument = gql`
+    query AuthComponent {
   currentUser {
     id
     name
@@ -191,31 +191,31 @@ export const CurrentUserDocument = gql`
     `;
 
 /**
- * __useCurrentUserQuery__
+ * __useAuthComponentQuery__
  *
- * To run a query within a React component, call `useCurrentUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAuthComponentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAuthComponentQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCurrentUserQuery({
+ * const { data, loading, error } = useAuthComponentQuery({
  *   variables: {
  *   },
  * });
  */
-export function useCurrentUserQuery(baseOptions?: Apollo.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+export function useAuthComponentQuery(baseOptions?: Apollo.QueryHookOptions<AuthComponentQuery, AuthComponentQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
+        return Apollo.useQuery<AuthComponentQuery, AuthComponentQueryVariables>(AuthComponentDocument, options);
       }
-export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+export function useAuthComponentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AuthComponentQuery, AuthComponentQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
+          return Apollo.useLazyQuery<AuthComponentQuery, AuthComponentQueryVariables>(AuthComponentDocument, options);
         }
-export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
-export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
-export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
+export type AuthComponentQueryHookResult = ReturnType<typeof useAuthComponentQuery>;
+export type AuthComponentLazyQueryHookResult = ReturnType<typeof useAuthComponentLazyQuery>;
+export type AuthComponentQueryResult = Apollo.QueryResult<AuthComponentQuery, AuthComponentQueryVariables>;
 export const CreateUserDocument = gql`
     mutation createUser($firebaseIdToken: String!, $name: String!, $email: String!) {
   createUser(

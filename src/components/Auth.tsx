@@ -4,7 +4,7 @@ import { Redirect } from "react-router-dom";
 import { ONBOARDING_PATH, SIGN_IN_PATH } from "../config/routes";
 import { useQuery } from "@apollo/client";
 import { UserAuthStatus } from "../utils/constants";
-import { CurrentUserDocument } from "../graphql/schema";
+import { AuthComponentDocument } from "../graphql/schema";
 
 const Unauthorized = 401;
 
@@ -12,7 +12,7 @@ type Props = {};
 
 export const Auth: FC<Props> = ({ children }) => {
   const { status } = useAuth();
-  const { loading, data, error } = useQuery(CurrentUserDocument);
+  const { loading, data, error } = useQuery(AuthComponentDocument);
 
   if (loading) {
     return <div>Loading...</div>;

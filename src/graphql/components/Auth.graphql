@@ -1,4 +1,4 @@
-query CurrentUser {
+query AuthComponent {
   currentUser {
     id
     name
