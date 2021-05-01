@@ -5,3 +5,4 @@ export const PASSWORD_RESET_PATH = "/password/reset";
 export const ONBOARDING_PATH = "/onboarding";
 // private pages
 export const TEAMS_PATH = "/teams";
+export const TIMELINE_PATH = "/teams/:teamId"
