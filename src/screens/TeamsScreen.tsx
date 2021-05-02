@@ -57,7 +57,7 @@ export const TeamsScreen: FC<Props> = () => {
       <Flex w="full" justifyContent="center" mt="100px">
         <Box w="900px">
           <TeamListHeader onCreateTeamButton={handleOpenModal} />
-          <Box mt="30px">
+          <Box my="30px">
             <TeamList members={data?.currentUser.members} />
           </Box>
         </Box>
