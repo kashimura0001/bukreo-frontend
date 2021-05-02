@@ -1,14 +1,31 @@
 import React, { FC } from "react";
 import { TeamListFragment, UserRole } from "../graphql/schema";
-import { Box, Flex, Text, Heading, SimpleGrid } from "@chakra-ui/react";
+import { Box, Flex, Text, SimpleGrid } from "@chakra-ui/react";
 import { generatePath, Link } from "react-router-dom";
 import { TIMELINE_PATH } from "../config/routes";
+import ContentLoader from "react-content-loader";
+
+const TeamListContentLoader: FC = () => {
+  return (
+    <Box width="100%">
+      <ContentLoader width="100%" height="100">
+        <rect x="0" y="0" width="260" height="100" />
+        <rect x="320" y="0" width="260" height="100" />
+        <rect x="640" y="0" width="260" height="100" />
+      </ContentLoader>
+    </Box>
+  );
+};
 
 type Props = {
   members: TeamListFragment[];
 };
 
 export const TeamList: FC<Props> = ({ members }) => {
+  if (!members) {
+    return <TeamListContentLoader />;
+  }
+
   return (
     <SimpleGrid columns={3} spacing="60px">
       {members.map(({ id, role, team }) => (

@@ -1,12 +1,11 @@
 import React, { FC } from "react";
-import { User } from "../graphql/schema";
 import { Flex, Box, Heading, Spacer, Button, Avatar } from "@chakra-ui/react";
 
 type Props = {
-  currentUser: User;
+  avatarUrl: string;
 };
 
-export const MainHeader: FC<Props> = ({ currentUser }) => {
+export const MainHeader: FC<Props> = ({ avatarUrl }) => {
   const handleClickIcon = () => {
     // TODO アイコンを押下したときの処理を実装する
     alert("hogehoge");
@@ -22,7 +21,7 @@ export const MainHeader: FC<Props> = ({ currentUser }) => {
         <Button borderRadius="full" p="0" onClick={handleClickIcon}>
           <Avatar
             boxSize="40px"
-            src={currentUser?.avatarUrl || "https://bit.ly/broken-link"}
+            src={avatarUrl || "https://bit.ly/broken-link"}
           />
         </Button>
       </Box>
