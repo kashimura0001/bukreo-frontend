@@ -5,6 +5,7 @@ import { ONBOARDING_PATH, SIGN_IN_PATH } from "../config/routes";
 import { useQuery } from "@apollo/client";
 import { UserAuthStatus } from "../utils/constants";
 import { AuthComponentDocument } from "../graphql/schema";
+import { LoadingScreen } from "../screens/LoadingScreen";
 
 const Unauthorized = 401;
 
@@ -15,7 +16,7 @@ export const Auth: FC<Props> = ({ children }) => {
   const { loading, data, error } = useQuery(AuthComponentDocument);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingScreen />;
   }
 
   if (status === UserAuthStatus.SignedOut) {
