@@ -5,12 +5,7 @@ import { PasswordInput } from "../components/PasswordInput";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import {
-  ONBOARDING_PATH,
-  PASSWORD_RESET_PATH,
-  SIGN_UP_PATH,
-  TEAMS_PATH,
-} from "../config/routes";
+import { PASSWORD_RESET_PATH, SIGN_UP_PATH, TEAMS_PATH } from "../config/routes";
 import { UserAuthStatus } from "../utils/constants";
 
 type Props = {};
@@ -25,7 +20,7 @@ export const SignInScreen: VFC<Props> = () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     await signInEmail(email, password);
-    await history.push(ONBOARDING_PATH);
+    await history.push(TEAMS_PATH);
   };
 
   if (status === UserAuthStatus.SignedIn) return <Redirect to={TEAMS_PATH} />;
@@ -59,14 +54,7 @@ export const SignInScreen: VFC<Props> = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </FormControl>
-            <Button
-              type="submit"
-              size="lg"
-              colorScheme="blue"
-              mt={12}
-              width="full"
-              variant="outline"
-            >
+            <Button type="submit" size="lg" colorScheme="blue" mt={12} width="full" variant="outline">
               ログイン
             </Button>
             <Box textAlign="center" mt={8}>
@@ -80,12 +68,7 @@ export const SignInScreen: VFC<Props> = () => {
               </Button>
             </Box>
             <Box textAlign="center" mt={4}>
-              <Button
-                color="blue.500"
-                variant="link"
-                fontWeight={400}
-                onClick={() => history.push(SIGN_UP_PATH)}
-              >
+              <Button color="blue.500" variant="link" fontWeight={400} onClick={() => history.push(SIGN_UP_PATH)}>
                 未登録の方はこちら
               </Button>
             </Box>
