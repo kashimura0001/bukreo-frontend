@@ -12,9 +12,9 @@ type Props = {};
 
 export const Auth: FC<Props> = ({ children }) => {
   const { status } = useAuth();
-  const { currentUser, fetched, error } = useCurrentUser();
+  const { currentUser, loading, error } = useCurrentUser();
 
-  if (!fetched) {
+  if (loading) {
     return <LoadingScreen />;
   }
 
