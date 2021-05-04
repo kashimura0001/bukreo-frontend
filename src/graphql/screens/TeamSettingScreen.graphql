@@ -1,0 +1,6 @@
+query TeamSettingScreen($teamId: String!) {
+  team(id: $teamId) {
+    id
+    name
+  }
+}

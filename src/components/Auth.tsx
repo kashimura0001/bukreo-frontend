@@ -2,10 +2,9 @@ import React, { FC } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { Redirect } from "react-router-dom";
 import { ONBOARDING_PATH, SIGN_IN_PATH } from "../config/routes";
-import { useQuery } from "@apollo/client";
 import { UserAuthStatus } from "../utils/constants";
-import { AuthComponentDocument } from "../graphql/schema";
 import { LoadingScreen } from "../screens/LoadingScreen";
+import { useCurrentUser } from "../hooks/useCurrentUser";
 
 const Unauthorized = 401;
 
@@ -13,9 +12,9 @@ type Props = {};
 
 export const Auth: FC<Props> = ({ children }) => {
   const { status } = useAuth();
-  const { loading, data, error } = useQuery(AuthComponentDocument);
+  const { currentUser, fetched, error } = useCurrentUser();
 
-  if (loading) {
+  if (!fetched) {
     return <LoadingScreen />;
   }
 
@@ -33,7 +32,7 @@ export const Auth: FC<Props> = ({ children }) => {
     }
   }
 
-  if (!data?.currentUser) {
+  if (!currentUser) {
     // TODO 通信エラーであることをトーストに表示する
     return <Redirect to={SIGN_IN_PATH} />;
   }

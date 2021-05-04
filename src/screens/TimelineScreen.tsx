@@ -8,7 +8,7 @@ export const TimelineScreen: FC<Props> = () => {
   const { teamId } = useParams<{ teamId: string }>();
   return (
     <>
-      <MainHeader avatarUrl={""} />
+      <MainHeader />
       <div>TimelineScreen: {teamId}</div>
     </>
   );

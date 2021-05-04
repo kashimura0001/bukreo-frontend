@@ -103,7 +103,7 @@ export type Team = {
   __typename?: 'Team';
   id: Scalars['ID'];
   members: Array<Member>;
-  invitations: Array<Maybe<Invitation>>;
+  invitations?: Maybe<Array<Maybe<Invitation>>>;
   name: Scalars['String'];
 };
 
@@ -121,8 +121,8 @@ export type UpdateUserInput = {
 export type User = {
   __typename?: 'User';
   id: Scalars['ID'];
-  members: Array<Maybe<Member>>;
-  invitations: Array<Maybe<Invitation>>;
+  members?: Maybe<Array<Maybe<Member>>>;
+  invitations?: Maybe<Array<Maybe<Invitation>>>;
   name: Scalars['String'];
   email: Scalars['String'];
   avatarUrl?: Maybe<Scalars['String']>;
@@ -144,12 +144,23 @@ export type AuthComponentQuery = (
   ) }
 );
 
-export type TeamListFragment = (
+export type TeamListRowFragment = (
   { __typename?: 'Member' }
   & Pick<Member, 'id' | 'role'>
   & { team: (
     { __typename?: 'Team' }
     & Pick<Team, 'id' | 'name'>
+  ) }
+);
+
+export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CurrentUserQuery = (
+  { __typename?: 'Query' }
+  & { currentUser: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'name' | 'email' | 'avatarUrl'>
   ) }
 );
 
@@ -181,6 +192,19 @@ export type CreateUserMutation = (
   ) }
 );
 
+export type TeamSettingScreenQueryVariables = Exact<{
+  teamId: Scalars['String'];
+}>;
+
+
+export type TeamSettingScreenQuery = (
+  { __typename?: 'Query' }
+  & { team: (
+    { __typename?: 'Team' }
+    & Pick<Team, 'id' | 'name'>
+  ) }
+);
+
 export type TeamsScreenQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -189,15 +213,15 @@ export type TeamsScreenQuery = (
   & { currentUser: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'name'>
-    & { members: Array<Maybe<(
+    & { members?: Maybe<Array<Maybe<(
       { __typename?: 'Member' }
-      & TeamListFragment
-    )>> }
+      & TeamListRowFragment
+    )>>> }
   ) }
 );
 
-export const TeamListFragmentDoc = gql`
-    fragment TeamList on Member {
+export const TeamListRowFragmentDoc = gql`
+    fragment TeamListRow on Member {
   id
   role
   team {
@@ -243,6 +267,43 @@ export function useAuthComponentLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type AuthComponentQueryHookResult = ReturnType<typeof useAuthComponentQuery>;
 export type AuthComponentLazyQueryHookResult = ReturnType<typeof useAuthComponentLazyQuery>;
 export type AuthComponentQueryResult = Apollo.QueryResult<AuthComponentQuery, AuthComponentQueryVariables>;
+export const CurrentUserDocument = gql`
+    query CurrentUser {
+  currentUser {
+    id
+    name
+    email
+    avatarUrl
+  }
+}
+    `;
+
+/**
+ * __useCurrentUserQuery__
+ *
+ * To run a query within a React component, call `useCurrentUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCurrentUserQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCurrentUserQuery(baseOptions?: Apollo.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
+      }
+export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
+        }
+export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
+export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
+export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
 export const CreateTeamDocument = gql`
     mutation createTeam($name: String!) {
   createTeam(input: {name: $name}) {
@@ -313,17 +374,53 @@ export function useCreateUserMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
 export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
 export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
+export const TeamSettingScreenDocument = gql`
+    query TeamSettingScreen($teamId: String!) {
+  team(id: $teamId) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useTeamSettingScreenQuery__
+ *
+ * To run a query within a React component, call `useTeamSettingScreenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTeamSettingScreenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTeamSettingScreenQuery({
+ *   variables: {
+ *      teamId: // value for 'teamId'
+ *   },
+ * });
+ */
+export function useTeamSettingScreenQuery(baseOptions: Apollo.QueryHookOptions<TeamSettingScreenQuery, TeamSettingScreenQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TeamSettingScreenQuery, TeamSettingScreenQueryVariables>(TeamSettingScreenDocument, options);
+      }
+export function useTeamSettingScreenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TeamSettingScreenQuery, TeamSettingScreenQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TeamSettingScreenQuery, TeamSettingScreenQueryVariables>(TeamSettingScreenDocument, options);
+        }
+export type TeamSettingScreenQueryHookResult = ReturnType<typeof useTeamSettingScreenQuery>;
+export type TeamSettingScreenLazyQueryHookResult = ReturnType<typeof useTeamSettingScreenLazyQuery>;
+export type TeamSettingScreenQueryResult = Apollo.QueryResult<TeamSettingScreenQuery, TeamSettingScreenQueryVariables>;
 export const TeamsScreenDocument = gql`
     query TeamsScreen {
   currentUser {
     id
     name
     members {
-      ...TeamList
+      ...TeamListRow
     }
   }
 }
-    ${TeamListFragmentDoc}`;
+    ${TeamListRowFragmentDoc}`;
 
 /**
  * __useTeamsScreenQuery__

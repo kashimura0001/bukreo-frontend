@@ -8,6 +8,7 @@ import {
   SIGN_UP_PATH,
   TEAMS_PATH,
   TIMELINE_PATH,
+  TEAM_SETTING_PATH,
 } from "./config/routes";
 import { SignUpScreen } from "./screens/SignUpScreen";
 import { Auth } from "./components/Auth";
@@ -18,6 +19,7 @@ import { TeamsScreen } from "./screens/TeamsScreen";
 import { useAuth } from "./hooks/useAuth";
 import { UserAuthStatus } from "./utils/constants";
 import { TimelineScreen } from "./screens/TimelineScreen";
+import { TeamSettingScreen } from "./screens/TeamSettingScreen";
 
 function App() {
   const { status } = useAuth();
@@ -30,15 +32,12 @@ function App() {
         <Route exact path={SIGN_UP_PATH} component={SignUpScreen} />
         <Route exact path={SIGN_IN_PATH} component={SignInScreen} />
         <Route exact path={ONBOARDING_PATH} component={OnboardingScreen} />
-        <Route
-          exact
-          path={PASSWORD_RESET_PATH}
-          component={PasswordResetScreen}
-        />
+        <Route exact path={PASSWORD_RESET_PATH} component={PasswordResetScreen} />
 
         <Auth>
           <Route exact path={TEAMS_PATH} component={TeamsScreen} />
           <Route exact path={TIMELINE_PATH} component={TimelineScreen} />
+          <Route exact path={TEAM_SETTING_PATH} component={TeamSettingScreen} />
         </Auth>
       </Switch>
     </BrowserRouter>

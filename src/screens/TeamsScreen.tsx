@@ -1,12 +1,12 @@
 import React, { FC, useState } from "react";
-import { useMutation, useQuery } from "@apollo/client";
-import { CreateTeamDocument, TeamsScreenDocument } from "../graphql/schema";
+import { useMutation } from "@apollo/client";
+import { CreateTeamDocument, useTeamsScreenQuery } from "../graphql/schema";
 import { MainHeader } from "../components/MainHeader";
 import { TeamListHeader } from "../components/TeamListHeader";
-import { TeamList } from "../components/TeamList";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid, Skeleton } from "@chakra-ui/react";
 import { TeamCreateModal } from "../components/TeamCreateModal";
 import { useToast } from "../hooks/useToast";
+import { TeamListRow } from "../components/TeamListRow";
 
 type Props = {};
 
@@ -17,10 +17,11 @@ export const TeamsScreen: FC<Props> = () => {
   const [teamName, setTeamName] = useState("");
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isCreatingTeam, setIsCreatingTeam] = useState(false);
-  const { data, error, refetch } = useQuery(TeamsScreenDocument);
+  const { data, error, refetch } = useTeamsScreenQuery();
   const [createTeam] = useMutation(CreateTeamDocument, {
     variables: { name: teamName },
   });
+  const members = data?.currentUser.members;
 
   const handleChangeTeamName = (value: string) => {
     setTeamName(value);
@@ -53,13 +54,21 @@ export const TeamsScreen: FC<Props> = () => {
 
   return (
     <>
-      <MainHeader avatarUrl={data?.currentUser?.avatarUrl} />
+      <MainHeader />
       <Flex w="full" justifyContent="center" mt="100px">
         <Box w="900px">
           <TeamListHeader onCreateTeamButton={handleOpenModal} />
-          <Box my="30px">
-            <TeamList members={data?.currentUser.members} />
-          </Box>
+          <SimpleGrid my="30px" spacing="30px">
+            {members ? (
+              members.map((member) => {
+                if (member) {
+                  return <TeamListRow key={member.team.id} member={member} />;
+                }
+              })
+            ) : (
+              <Skeleton w="100%" h="100px" borderRadius="10px" />
+            )}
+          </SimpleGrid>
         </Box>
       </Flex>
       <TeamCreateModal

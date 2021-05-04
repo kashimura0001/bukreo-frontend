@@ -657,16 +657,12 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
+              "kind": "LIST",
               "name": null,
               "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Invitation",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "Invitation",
+                "ofType": null
               }
             },
             "isDeprecated": false,
@@ -806,16 +802,12 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
+              "kind": "LIST",
               "name": null,
               "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Member",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "Member",
+                "ofType": null
               }
             },
             "isDeprecated": false,
@@ -826,16 +818,12 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
+              "kind": "LIST",
               "name": null,
               "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Invitation",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "Invitation",
+                "ofType": null
               }
             },
             "isDeprecated": false,

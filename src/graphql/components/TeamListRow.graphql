@@ -1,4 +1,4 @@
-fragment TeamList on Member {
+fragment TeamListRow on Member {
   id
   role
   team {
