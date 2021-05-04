@@ -20,6 +20,7 @@ type Props = {
 // TODO memberではなくてteamを直接取得できるようにAPIを修正する
 export const TeamListRow: FC<Props> = ({ member }) => {
   return (
+    // TODO 選択したteamはグローバルステートに入れるようにして持ち回る
     <Link to={generatePath(TIMELINE_PATH, { teamId: member.team.id })}>
       <Flex
         w="100%"
