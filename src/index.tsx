@@ -8,16 +8,19 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { AuthProvider } from "./providers/AuthProvider";
 import { ApolloProvider } from "@apollo/client";
 import { apolloClient } from "./config/apolloClient";
+import { RecoilRoot } from "recoil";
 
 ReactDOM.render(
   <React.StrictMode>
-    <ChakraProvider>
-      <AuthProvider>
-        <ApolloProvider client={apolloClient}>
-          <App />
-        </ApolloProvider>
-      </AuthProvider>
-    </ChakraProvider>
+    <RecoilRoot>
+      <ChakraProvider>
+        <AuthProvider>
+          <ApolloProvider client={apolloClient}>
+            <App />
+          </ApolloProvider>
+        </AuthProvider>
+      </ChakraProvider>
+    </RecoilRoot>
   </React.StrictMode>,
   document.getElementById("root")
 );
