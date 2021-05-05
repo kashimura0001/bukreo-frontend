@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import { useMutation } from "@apollo/client";
-import { CreateTeamDocument, useTeamsScreenQuery } from "../graphql/schema";
+import { CreateTeamDocument, useCreateTeamMutation, useTeamsScreenQuery } from "../graphql/schema";
 import { MainHeader } from "../components/MainHeader";
 import { TeamListHeader } from "../components/TeamListHeader";
 import { Box, Flex, SimpleGrid, Skeleton } from "@chakra-ui/react";
@@ -16,9 +16,7 @@ export const TeamsScreen: FC<Props> = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isCreatingTeam, setIsCreatingTeam] = useState(false);
   const { data, error, refetch } = useTeamsScreenQuery();
-  const [createTeam] = useMutation(CreateTeamDocument, {
-    variables: { name: teamName },
-  });
+  const [createTeam] = useCreateTeamMutation({ variables: { name: teamName } });
   const teams = data?.currentUser.teams;
 
   const handleChangeTeamName = (value: string) => {
