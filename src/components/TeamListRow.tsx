@@ -19,7 +19,6 @@ type Props = {
 
 export const TeamListRow: FC<Props> = ({ team }) => {
   return (
-    // TODO 選択したteamはグローバルステートに入れるようにして持ち回る
     <Link to={generatePath(TIMELINE_PATH, { teamId: team.id })}>
       <Flex
         w="100%"
