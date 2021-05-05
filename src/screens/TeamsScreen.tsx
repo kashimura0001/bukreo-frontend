@@ -1,6 +1,5 @@
 import React, { FC, useState } from "react";
-import { useMutation } from "@apollo/client";
-import { CreateTeamDocument, useCreateTeamMutation, useTeamsScreenQuery } from "../graphql/schema";
+import { useCreateTeamMutation, useTeamsScreenQuery } from "../graphql/schema";
 import { MainHeader } from "../components/MainHeader";
 import { TeamListHeader } from "../components/TeamListHeader";
 import { Box, Flex, SimpleGrid, Skeleton } from "@chakra-ui/react";
@@ -58,9 +57,7 @@ export const TeamsScreen: FC<Props> = () => {
           <SimpleGrid my="30px" spacing="30px">
             {teams ? (
               teams.map((team) => {
-                if (team) {
-                  return <TeamListRow key={team.id} team={team} />;
-                }
+                return team && <TeamListRow key={team.id} team={team} />;
               })
             ) : (
               <Skeleton w="100%" h="100px" borderRadius="10px" />
