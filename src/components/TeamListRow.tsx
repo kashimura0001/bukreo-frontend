@@ -14,14 +14,13 @@ const userRoleText = (role: UserRole) => {
 };
 
 type Props = {
-  member: TeamListRowFragment;
+  team: TeamListRowFragment;
 };
 
-// TODO memberではなくてteamを直接取得できるようにAPIを修正する
-export const TeamListRow: FC<Props> = ({ member }) => {
+export const TeamListRow: FC<Props> = ({ team }) => {
   return (
     // TODO 選択したteamはグローバルステートに入れるようにして持ち回る
-    <Link to={generatePath(TIMELINE_PATH, { teamId: member.team.id })}>
+    <Link to={generatePath(TIMELINE_PATH, { teamId: team.id })}>
       <Flex
         w="100%"
         h="100px"
@@ -35,10 +34,10 @@ export const TeamListRow: FC<Props> = ({ member }) => {
         {/* TODO チームアイコンを設定できるようにする */}
         <Box borderRadius="50%" backgroundColor="gray.200" w="45px" h="45px" />
         <Text ml="20px" fontWeight="bold" overflow="hidden" isTruncated>
-          {member.team.name}
+          {team.name}
         </Text>
         <Text ml="auto" fontSize="12px">
-          {member.role ? userRoleText(member.role) : ""}
+          {team.role ? userRoleText(team.role) : ""}
         </Text>
       </Flex>
     </Link>

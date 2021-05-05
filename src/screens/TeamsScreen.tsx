@@ -10,8 +10,6 @@ import { TeamListRow } from "../components/TeamListRow";
 
 type Props = {};
 
-// TODO userから直接teamsを引けるようにAPIを修正する
-// TODO ↑が完了したらチームを追加したあとrefetchではなくてキャッシュを更新するようにする
 export const TeamsScreen: FC<Props> = () => {
   const { successToast, errorToast } = useToast();
   const [teamName, setTeamName] = useState("");
@@ -21,7 +19,7 @@ export const TeamsScreen: FC<Props> = () => {
   const [createTeam] = useMutation(CreateTeamDocument, {
     variables: { name: teamName },
   });
-  const members = data?.currentUser.members;
+  const teams = data?.currentUser.teams;
 
   const handleChangeTeamName = (value: string) => {
     setTeamName(value);
@@ -40,6 +38,7 @@ export const TeamsScreen: FC<Props> = () => {
     try {
       await createTeam();
       setTeamName("");
+      // TODO キャッシュを更新するようにする
       refetch();
       successToast("チームを作成しました");
     } catch (e) {
@@ -59,10 +58,10 @@ export const TeamsScreen: FC<Props> = () => {
         <Box w="900px">
           <TeamListHeader onCreateTeamButton={handleOpenModal} />
           <SimpleGrid my="30px" spacing="30px">
-            {members ? (
-              members.map((member) => {
-                if (member) {
-                  return <TeamListRow key={member.team.id} member={member} />;
+            {teams ? (
+              teams.map((team) => {
+                if (team) {
+                  return <TeamListRow key={team.id} team={team} />;
                 }
               })
             ) : (

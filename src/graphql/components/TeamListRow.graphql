@@ -1,8 +1,5 @@
-fragment TeamListRow on Member {
+fragment TeamListRow on Team {
   id
+  name
   role
-  team {
-    id
-    name
-  }
 }

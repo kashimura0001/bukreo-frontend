@@ -105,6 +105,7 @@ export type Team = {
   members: Array<Member>;
   invitations?: Maybe<Array<Maybe<Invitation>>>;
   name: Scalars['String'];
+  role?: Maybe<UserRole>;
 };
 
 export type UpdateTeamInput = {
@@ -121,11 +122,11 @@ export type UpdateUserInput = {
 export type User = {
   __typename?: 'User';
   id: Scalars['ID'];
-  members?: Maybe<Array<Maybe<Member>>>;
   invitations?: Maybe<Array<Maybe<Invitation>>>;
   name: Scalars['String'];
   email: Scalars['String'];
   avatarUrl?: Maybe<Scalars['String']>;
+  teams?: Maybe<Array<Maybe<Team>>>;
 };
 
 export enum UserRole {
@@ -145,12 +146,8 @@ export type AuthComponentQuery = (
 );
 
 export type TeamListRowFragment = (
-  { __typename?: 'Member' }
-  & Pick<Member, 'id' | 'role'>
-  & { team: (
-    { __typename?: 'Team' }
-    & Pick<Team, 'id' | 'name'>
-  ) }
+  { __typename?: 'Team' }
+  & Pick<Team, 'id' | 'name' | 'role'>
 );
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
@@ -213,21 +210,18 @@ export type TeamsScreenQuery = (
   & { currentUser: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'name'>
-    & { members?: Maybe<Array<Maybe<(
-      { __typename?: 'Member' }
+    & { teams?: Maybe<Array<Maybe<(
+      { __typename?: 'Team' }
       & TeamListRowFragment
     )>>> }
   ) }
 );
 
 export const TeamListRowFragmentDoc = gql`
-    fragment TeamListRow on Member {
+    fragment TeamListRow on Team {
   id
+  name
   role
-  team {
-    id
-    name
-  }
 }
     `;
 export const AuthComponentDocument = gql`
@@ -415,7 +409,7 @@ export const TeamsScreenDocument = gql`
   currentUser {
     id
     name
-    members {
+    teams {
       ...TeamListRow
     }
   }

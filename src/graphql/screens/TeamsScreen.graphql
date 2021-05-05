@@ -2,7 +2,7 @@ query TeamsScreen {
   currentUser {
     id
     name
-    members {
+    teams {
       ...TeamListRow
     }
   }
