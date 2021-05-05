@@ -48,7 +48,6 @@ export enum InvitationStatus {
 export type Member = {
   __typename?: 'Member';
   id: Scalars['ID'];
-  team: Team;
   user: User;
   role?: Maybe<UserRole>;
 };
