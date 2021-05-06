@@ -1,16 +1,21 @@
 import React, { FC, useEffect, useState } from "react";
 import { MainHeader } from "../components/MainHeader";
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Flex, Box, Button, Input, FormLabel } from "@chakra-ui/react";
-import { TeamSettingScreenDocument } from "../graphql/schema";
-import { useQuery } from "@apollo/client";
+import { useTeamSettingScreenQuery, useUpdateTeamMutation } from "../graphql/schema";
 import { useParams } from "react-router-dom";
+import { useToast } from "../hooks/useToast";
+import { LoadingScreen } from "./LoadingScreen";
 
 type Props = {};
 
 export const TeamSettingScreen: FC<Props> = () => {
-  const { teamId } = useParams<{ teamId: string }>();
-  const { data } = useQuery(TeamSettingScreenDocument, { variables: { teamId } });
+  const [loading, setLoading] = useState(false);
   const [teamName, setTeamName] = useState("");
+  const { teamId } = useParams<{ teamId: string }>();
+  const { data } = useTeamSettingScreenQuery({ variables: { teamId } });
+  // TODO キャッシュを更新する。そうしないとチームリストが古いままになってしまう。
+  const [updateTeam] = useUpdateTeamMutation({ variables: { teamId, name: teamName } });
+  const { successToast, errorToast } = useToast();
 
   useEffect(() => {
     if (!data) return;
@@ -22,11 +27,27 @@ export const TeamSettingScreen: FC<Props> = () => {
     setTeamName(value);
   };
 
+  const handleUpdateTeam = async () => {
+    try {
+      setLoading(true);
+      await updateTeam();
+      successToast("チーム設定を更新しました");
+    } catch (e) {
+      errorToast("チーム設定の更新に失敗しました");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleDeleteTeam = () => {
     if (window.confirm("本当にチームを削除しますか？")) {
       //  TODO チームを削除する処理をかく
     }
   };
+
+  if (!data) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>
@@ -48,11 +69,20 @@ export const TeamSettingScreen: FC<Props> = () => {
                     type="text"
                     id="teamName"
                     value={teamName}
+                    disabled={loading}
                     onChange={(e) => handleChangeTeamName(e.target.value)}
                   />
                 </Flex>
                 <Flex w="100%" mt="50px">
-                  <Button type="submit" colorScheme="blue" variant="outline" ml="auto" w="170px">
+                  <Button
+                    type="submit"
+                    colorScheme="blue"
+                    variant="outline"
+                    ml="auto"
+                    w="170px"
+                    disabled={loading}
+                    onClick={handleUpdateTeam}
+                  >
                     更新する
                   </Button>
                 </Flex>
@@ -64,6 +94,7 @@ export const TeamSettingScreen: FC<Props> = () => {
                     mt="30px"
                     ml="auto"
                     w="170px"
+                    disabled={loading}
                     onClick={handleDeleteTeam}
                   >
                     チームを削除する
