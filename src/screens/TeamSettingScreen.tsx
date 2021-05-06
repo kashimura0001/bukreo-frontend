@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { MainHeader } from "../components/MainHeader";
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Flex, Box, Button, Input, FormLabel } from "@chakra-ui/react";
-import { useTeamSettingScreenQuery, useUpdateTeamMutation } from "../graphql/schema";
+import { TeamListRowFragmentDoc, useTeamSettingScreenQuery, useUpdateTeamMutation } from "../graphql/schema";
 import { useParams } from "react-router-dom";
 import { useToast } from "../hooks/useToast";
 import { LoadingScreen } from "./LoadingScreen";
@@ -13,8 +13,17 @@ export const TeamSettingScreen: FC<Props> = () => {
   const [teamName, setTeamName] = useState("");
   const { teamId } = useParams<{ teamId: string }>();
   const { data } = useTeamSettingScreenQuery({ variables: { teamId } });
-  // TODO キャッシュを更新する。そうしないとチームリストが古いままになってしまう。
-  const [updateTeam] = useUpdateTeamMutation({ variables: { teamId, name: teamName } });
+  const [updateTeam] = useUpdateTeamMutation({
+    variables: { teamId, name: teamName },
+    update(cache, { data }) {
+      if (!data) return;
+      cache.writeFragment({
+        id: cache.identify(data.updateTeam),
+        fragment: TeamListRowFragmentDoc,
+        data: { name: data.updateTeam.name },
+      });
+    },
+  });
   const { successToast, errorToast } = useToast();
 
   useEffect(() => {
