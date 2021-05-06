@@ -1,5 +1,7 @@
 mutation updateTeam($teamId: ID!, $name: String!) {
   updateTeam(input: { id: $teamId, name: $name }) {
     id
+    name
+    role
   }
 }

@@ -198,7 +198,7 @@ export type UpdateTeamMutation = (
   { __typename?: 'Mutation' }
   & { updateTeam: (
     { __typename?: 'Team' }
-    & Pick<Team, 'id'>
+    & Pick<Team, 'id' | 'name' | 'role'>
   ) }
 );
 
@@ -387,6 +387,8 @@ export const UpdateTeamDocument = gql`
     mutation updateTeam($teamId: ID!, $name: String!) {
   updateTeam(input: {id: $teamId, name: $name}) {
     id
+    name
+    role
   }
 }
     `;
