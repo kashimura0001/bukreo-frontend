@@ -1,21 +1,28 @@
 import React, { FC, useState } from "react";
-import { useCreateTeamMutation, useTeamsScreenQuery } from "../graphql/schema";
+import { TeamsScreenDocument, useCreateTeamMutation, useTeamsScreenQuery } from "../graphql/schema";
 import { MainHeader } from "../components/MainHeader";
 import { TeamListHeader } from "../components/TeamListHeader";
 import { Box, Flex, SimpleGrid, Skeleton } from "@chakra-ui/react";
 import { TeamCreateModal } from "../components/TeamCreateModal";
 import { useToast } from "../hooks/useToast";
 import { TeamListRow } from "../components/TeamListRow";
+import { useApolloClient } from "@apollo/client";
 
 type Props = {};
 
 export const TeamsScreen: FC<Props> = () => {
+  const client = useApolloClient();
   const { successToast, errorToast } = useToast();
   const [teamName, setTeamName] = useState("");
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isCreatingTeam, setIsCreatingTeam] = useState(false);
-  const { data, error, refetch } = useTeamsScreenQuery();
-  const [createTeam] = useCreateTeamMutation({ variables: { name: teamName } });
+  const { data, error } = useTeamsScreenQuery();
+  const [createTeam] = useCreateTeamMutation({
+    variables: { name: teamName },
+    onCompleted(data) {
+      client.writeQuery({ query: TeamsScreenDocument, data: { currentUser: { teams: data.createTeam } } });
+    },
+  });
   const teams = data?.currentUser.teams;
 
   const handleChangeTeamName = (value: string) => {
@@ -35,8 +42,6 @@ export const TeamsScreen: FC<Props> = () => {
     try {
       await createTeam();
       setTeamName("");
-      // TODO キャッシュを更新するようにする
-      refetch();
       successToast("チームを作成しました");
     } catch (e) {
       errorToast("チームの作成に失敗しました");
