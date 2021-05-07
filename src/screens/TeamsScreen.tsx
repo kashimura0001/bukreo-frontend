@@ -6,12 +6,10 @@ import { Box, Flex, SimpleGrid, Skeleton } from "@chakra-ui/react";
 import { TeamCreateModal } from "../components/TeamCreateModal";
 import { useToast } from "../hooks/useToast";
 import { TeamListRow } from "../components/TeamListRow";
-import { useApolloClient } from "@apollo/client";
 
 type Props = {};
 
 export const TeamsScreen: FC<Props> = () => {
-  const client = useApolloClient();
   const { successToast, errorToast } = useToast();
   const [teamName, setTeamName] = useState("");
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -19,8 +17,9 @@ export const TeamsScreen: FC<Props> = () => {
   const { data, error } = useTeamsScreenQuery();
   const [createTeam] = useCreateTeamMutation({
     variables: { name: teamName },
-    onCompleted(data) {
-      client.writeQuery({ query: TeamsScreenDocument, data: { currentUser: { teams: data.createTeam } } });
+    update(cache, { data }) {
+      if (!data) return;
+      cache.writeQuery({ query: TeamsScreenDocument, data: { currentUser: { teams: data.createTeam } } });
     },
   });
   const teams = data?.currentUser.teams;
