@@ -1,14 +1,21 @@
 import React, { FC, useEffect, useState } from "react";
 import { MainHeader } from "../components/MainHeader";
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Flex, Box, Button, Input, FormLabel } from "@chakra-ui/react";
-import { TeamListRowFragmentDoc, useTeamSettingScreenQuery, useUpdateTeamMutation } from "../graphql/schema";
-import { useParams } from "react-router-dom";
+import {
+  TeamListRowFragmentDoc,
+  useTeamSettingScreenQuery,
+  useUpdateTeamMutation,
+  useDeleteTeamMutation,
+} from "../graphql/schema";
+import { useHistory, useParams } from "react-router-dom";
 import { useToast } from "../hooks/useToast";
 import { LoadingScreen } from "./LoadingScreen";
+import { TEAMS_PATH } from "../config/routes";
 
 type Props = {};
 
 export const TeamSettingScreen: FC<Props> = () => {
+  const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [teamName, setTeamName] = useState("");
   const { teamId } = useParams<{ teamId: string }>();
@@ -21,6 +28,18 @@ export const TeamSettingScreen: FC<Props> = () => {
         id: cache.identify(data.updateTeam),
         fragment: TeamListRowFragmentDoc,
         data: { name: data.updateTeam.name },
+      });
+    },
+  });
+  const [deleteTeam] = useDeleteTeamMutation({
+    variables: { teamId },
+    update(cache, { data }) {
+      if (!data?.deleteTeam) return;
+      cache.modify({
+        id: cache.identify(data.deleteTeam),
+        fields(_fieldValue, details) {
+          return details.DELETE;
+        },
       });
     },
   });
@@ -48,9 +67,18 @@ export const TeamSettingScreen: FC<Props> = () => {
     }
   };
 
-  const handleDeleteTeam = () => {
+  const handleDeleteTeam = async () => {
     if (window.confirm("本当にチームを削除しますか？")) {
-      //  TODO チームを削除する処理をかく
+      try {
+        setLoading(true);
+        await deleteTeam();
+        successToast("チームを削除しました");
+        history.push(TEAMS_PATH);
+      } catch (e) {
+        errorToast("チームの削除に失敗しました");
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
