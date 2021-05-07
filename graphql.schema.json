@@ -463,9 +463,13 @@
               }
             ],
             "type": {
-              "kind": "OBJECT",
-              "name": "Team",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Team",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -532,18 +536,6 @@
                 "name": "User",
                 "ofType": null
               }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "deleteUser",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "User",
-              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

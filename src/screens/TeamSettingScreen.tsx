@@ -34,7 +34,7 @@ export const TeamSettingScreen: FC<Props> = () => {
   const [deleteTeam] = useDeleteTeamMutation({
     variables: { teamId },
     update(cache, { data }) {
-      if (!data?.deleteTeam) return;
+      if (!data) return;
       cache.modify({
         id: cache.identify(data.deleteTeam),
         fields(_fieldValue, details) {

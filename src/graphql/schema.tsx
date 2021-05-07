@@ -60,10 +60,9 @@ export type Mutation = {
   __typename?: 'Mutation';
   createTeam: Team;
   updateTeam: Team;
-  deleteTeam?: Maybe<Team>;
+  deleteTeam: Team;
   createUser: User;
   updateUser: User;
-  deleteUser?: Maybe<User>;
 };
 
 
@@ -199,10 +198,10 @@ export type DeleteTeamMutationVariables = Exact<{
 
 export type DeleteTeamMutation = (
   { __typename?: 'Mutation' }
-  & { deleteTeam?: Maybe<(
+  & { deleteTeam: (
     { __typename?: 'Team' }
     & Pick<Team, 'id' | 'name' | 'role'>
-  )> }
+  ) }
 );
 
 export type UpdateTeamMutationVariables = Exact<{
