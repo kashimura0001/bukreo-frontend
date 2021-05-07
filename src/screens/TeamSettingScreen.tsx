@@ -1,12 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { MainHeader } from "../components/MainHeader";
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Flex, Box, Button, Input, FormLabel } from "@chakra-ui/react";
-import {
-  TeamListRowFragmentDoc,
-  useTeamSettingScreenQuery,
-  useUpdateTeamMutation,
-  useDeleteTeamMutation,
-} from "../graphql/schema";
+import { useTeamSettingScreenQuery, useUpdateTeamMutation, useDeleteTeamMutation } from "../graphql/schema";
 import { useHistory, useParams } from "react-router-dom";
 import { useToast } from "../hooks/useToast";
 import { LoadingScreen } from "./LoadingScreen";
@@ -22,14 +17,6 @@ export const TeamSettingScreen: FC<Props> = () => {
   const { data } = useTeamSettingScreenQuery({ variables: { teamId } });
   const [updateTeam] = useUpdateTeamMutation({
     variables: { teamId, name: teamName },
-    update(cache, { data }) {
-      if (!data) return;
-      cache.writeFragment({
-        id: cache.identify(data.updateTeam),
-        fragment: TeamListRowFragmentDoc,
-        data: { name: data.updateTeam.name },
-      });
-    },
   });
   const [deleteTeam] = useDeleteTeamMutation({
     variables: { teamId },
