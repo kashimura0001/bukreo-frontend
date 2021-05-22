@@ -16,6 +16,7 @@ import { FiUser, FiSettings, FiList, FiLogOut } from "react-icons/fi";
 import { useParams, useHistory, generatePath } from "react-router-dom";
 import { TEAM_SETTING_PATH, TEAMS_PATH } from "../config/routes";
 import { useCurrentUser } from "../hooks/useCurrentUser";
+import { colors } from "../constants/color";
 
 type Props = {};
 
@@ -25,7 +26,7 @@ export const MainHeader: FC<Props> = memo(() => {
   const history = useHistory();
 
   return (
-    <Flex p="2" h="60px" borderBottom="1px" borderColor="gray.300">
+    <Flex p="2" h="60px" backgroundColor={colors.pallets.white} boxShadow="md">
       <Box>
         <Heading size="lg">Bukreo</Heading>
       </Box>
@@ -51,7 +52,7 @@ export const MainHeader: FC<Props> = memo(() => {
             </>
           )}
           <MenuDivider />
-          <MenuItem icon={<FiLogOut />} color="red">
+          <MenuItem icon={<FiLogOut />} color={colors.semantics.dangerText}>
             ログアウト
           </MenuItem>
         </MenuList>

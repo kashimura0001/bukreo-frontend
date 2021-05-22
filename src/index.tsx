@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./lib/firebase";
-import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider } from "@chakra-ui/react";
@@ -9,11 +8,23 @@ import { AuthProvider } from "./providers/AuthProvider";
 import { ApolloProvider } from "@apollo/client";
 import { apolloClient } from "./config/apolloClient";
 import { RecoilRoot } from "recoil";
+import { extendTheme } from "@chakra-ui/react";
+import { colors } from "./constants/color";
+
+const theme = extendTheme({
+  styles: {
+    global: {
+      body: {
+        backgroundColor: colors.semantics.bodyBackground,
+      },
+    },
+  },
+});
 
 ReactDOM.render(
   <React.StrictMode>
     <RecoilRoot>
-      <ChakraProvider>
+      <ChakraProvider theme={theme}>
         <AuthProvider>
           <ApolloProvider client={apolloClient}>
             <App />
