@@ -13,8 +13,10 @@ const semantics = {
   subText: pallets.dimGray,
   whiteText: pallets.white,
   dangerText: pallets.red,
+  linkText: "blue.500",
   border: pallets.lightGrey,
   successButton: pallets.steelBlur,
+  defaultIconBackground: pallets.dimGray,
 };
 
 export const colors = { pallets, semantics };
