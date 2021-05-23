@@ -34,7 +34,6 @@ export const TeamCreateModal: FC<Props> = ({
 }) => {
   return (
     <Modal
-      isCentered
       blockScrollOnMount={false}
       closeOnOverlayClick={false}
       isOpen={isOpen}
