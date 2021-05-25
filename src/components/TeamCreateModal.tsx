@@ -24,22 +24,9 @@ type Props = {
   onClose: () => void;
 };
 
-export const TeamCreateModal: FC<Props> = ({
-  teamName,
-  disabled,
-  isOpen,
-  onChangeName,
-  onCreate,
-  onClose,
-}) => {
+export const TeamCreateModal: FC<Props> = ({ teamName, disabled, isOpen, onChangeName, onCreate, onClose }) => {
   return (
-    <Modal
-      blockScrollOnMount={false}
-      closeOnOverlayClick={false}
-      isOpen={isOpen}
-      onClose={onClose}
-      size="xl"
-    >
+    <Modal blockScrollOnMount={false} closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size="xl">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader borderBottom="1px" borderColor="gray.400">
@@ -63,7 +50,7 @@ export const TeamCreateModal: FC<Props> = ({
         </ModalBody>
         <ModalFooter>
           <Flex w="100%" justifyContent="center" mt="50px" mb="30px">
-            <Button w="170px" onClick={onClose} disabled={disabled}>
+            <Button w="170px" borderColor="black" variant="outline" onClick={onClose} disabled={disabled}>
               キャンセル
             </Button>
             <Button
@@ -72,7 +59,7 @@ export const TeamCreateModal: FC<Props> = ({
               variant="outline"
               ml={10}
               onClick={onCreate}
-              disabled={disabled}
+              disabled={disabled || !teamName}
             >
               作成する
             </Button>
