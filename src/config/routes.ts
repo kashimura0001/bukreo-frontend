@@ -7,3 +7,4 @@ export const ONBOARDING_PATH = "/onboarding";
 export const TEAMS_PATH = "/teams";
 export const TEAM_SETTING_PATH = "/teams/:teamId/setting"
 export const TIMELINE_PATH = "/teams/:teamId"
+export const MEMBERS_PATH = "/teams/:teamId/members"

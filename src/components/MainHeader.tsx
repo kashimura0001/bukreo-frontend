@@ -2,6 +2,7 @@ import React, { FC, memo } from "react";
 import {
   Flex,
   Box,
+  HStack,
   Heading,
   Spacer,
   Button,
@@ -13,8 +14,8 @@ import {
   MenuDivider,
 } from "@chakra-ui/react";
 import { FiUser, FiSettings, FiList, FiLogOut } from "react-icons/fi";
-import { useParams, useHistory, generatePath } from "react-router-dom";
-import { TEAM_SETTING_PATH, TEAMS_PATH } from "../config/routes";
+import { useParams, useHistory, generatePath, Link } from "react-router-dom";
+import { MEMBERS_PATH, TEAM_SETTING_PATH, TEAMS_PATH, TIMELINE_PATH } from "../config/routes";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import { colors } from "../constants/color";
 
@@ -27,9 +28,19 @@ export const MainHeader: FC<Props> = memo(() => {
 
   return (
     <Flex p="2" h="60px" backgroundColor={colors.pallets.white} boxShadow="md">
-      <Box>
+      <HStack spacing="40px">
         <Heading size="lg">Bukreo</Heading>
-      </Box>
+        {teamId && (
+          <>
+            <Link to={generatePath(TIMELINE_PATH, { teamId: teamId })}>
+              <Box _hover={{ fontWeight: "bold" }}>タイムライン</Box>
+            </Link>
+            <Link to={generatePath(MEMBERS_PATH, { teamId: teamId })}>
+              <Box _hover={{ fontWeight: "bold" }}>メンバー</Box>
+            </Link>
+          </>
+        )}
+      </HStack>
       <Spacer />
       <Menu>
         <MenuButton as={Button} borderRadius="full" p="0">
