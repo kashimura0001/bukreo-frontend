@@ -33,7 +33,12 @@ export const MainHeader: FC<Props> = memo(() => {
       <Spacer />
       <Menu>
         <MenuButton as={Button} borderRadius="full" p="0">
-          <Avatar boxSize="40px" src={currentUser?.avatarUrl || ""} />
+          <Avatar
+            name={currentUser?.name}
+            backgroundColor={colors.semantics.defaultIconBackground}
+            boxSize="40px"
+            src={currentUser?.avatarUrl || ""}
+          />
         </MenuButton>
         <MenuList>
           <MenuItem icon={<FiUser />}>プロフィール</MenuItem>
